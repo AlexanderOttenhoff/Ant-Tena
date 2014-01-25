@@ -8,6 +8,7 @@ public class MainGameLogic : MonoBehaviour
     public EventManager EventManager;
     public StateMachine<GameEvent> PlayerStateMachine;
     public AntController PlayerAnt;
+    public GameManager GameManager;
 
     private MenuState _menuState;
     private ExplorationState _explorationState;
@@ -42,8 +43,6 @@ public class MainGameLogic : MonoBehaviour
 
     private void EnterMenuState()
     {
-        Debug.Log("Entered menu state");
-        // init
         PlayerAnt.enabled = false;
         // <FOR DEBUGGING>
         PlayerAnt.GetComponent<FPSInputController>().enabled = false;
@@ -54,12 +53,13 @@ public class MainGameLogic : MonoBehaviour
     private void ExitMenuState()
     {
         Debug.Log("Game start");
-        // init
         PlayerAnt.enabled = true;
         // <FOR DEBUGGING>
         PlayerAnt.GetComponent<FPSInputController>().enabled = true;
         PlayerAnt.GetComponentInChildren<MouseLook>().enabled = true;
         // </FOR DEBUGGING>
+        this.ExecuteAfter(1f, () => GameManager.IntroSound.Play());
+        PlayerAnt.transform.position = GameManager.StartPosition.position;
     }
 
     private void EnterDialogueState()
@@ -86,6 +86,10 @@ public class MainGameLogic : MonoBehaviour
 
         if (PlayerStateMachine.CurrentState == _explorationState)
         {
+            if (PlayerAnt.transform.position.y < 0)
+            {
+                PlayerStateMachine.Tick(GameEvent.Died);
+            }
             // play natural sounds
         }
         else if (PlayerStateMachine.CurrentState == _dialogueState)
@@ -98,6 +102,14 @@ public class MainGameLogic : MonoBehaviour
     void OnGUI()
     {
         GUILayout.Label("State: " + PlayerStateMachine.CurrentState);
+        if (PlayerStateMachine.CurrentState == _menuState)
+        {
+            float width = 100f;
+            float height = 50f;
+            GUILayout.BeginArea(new Rect((Screen.width / 2f) - width, (Screen.height / 2f) - height, width, height));
+            GUILayout.Label("Press 'Space' or 'Start' to begin");
+            GUILayout.EndArea();
+        }
     }
 
 
