@@ -2,7 +2,7 @@
 using System.Collections;
 using XInputDotNetPure;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
 public class AntController : MonoBehaviour {
 
 	public float speed = 250f;
@@ -21,7 +21,7 @@ public class AntController : MonoBehaviour {
 	bool isPlayingAudio = false;
 
 	void Awake() {
-		foreach (AudioClip clip in manager.antClips) {
+		for (int i = 0; i < manager.antClips.Count; i++) {
 			gameObject.AddComponent<AudioSource>();
 		}
 	}
