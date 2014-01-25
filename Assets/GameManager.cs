@@ -7,10 +7,6 @@ public class GameManager : MonoBehaviour {
     public AudioSource IntroSound;
     public Transform StartPosition;
 
-	void Awake() {
-        DontDestroyOnLoad(gameObject);
-	}
-
 	void Update() {
 
 	}
