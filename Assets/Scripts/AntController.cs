@@ -20,11 +20,6 @@ public class AntController : MonoBehaviour {
 	AudioSource audioSource;
 	bool isPlayingAudio = false;
 
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
 	void Start() {
 		controller = GetComponent<CharacterController>();
 		audioSource = GetComponent<AudioSource>();
