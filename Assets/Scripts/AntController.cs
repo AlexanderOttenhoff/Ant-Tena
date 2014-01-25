@@ -3,7 +3,7 @@ using System.Collections;
 using XInputDotNetPure;
 
 [RequireComponent(typeof(CharacterController))]
-public class FPSWalkerEnhanced : MonoBehaviour {
+public class AntController : MonoBehaviour {
 
 	public float speed = 250f;
 	public float lookSpeed = 100f;
@@ -12,7 +12,7 @@ public class FPSWalkerEnhanced : MonoBehaviour {
 	private CharacterController controller;
 
 	bool playerIndexSet = false;
-	PlayerIndex playerIndex;
+	public PlayerIndex playerIndex;
 	GamePadState state;
 	GamePadState prevState;
 
@@ -35,18 +35,17 @@ public class FPSWalkerEnhanced : MonoBehaviour {
 
 		state = GamePad.GetState(playerIndex);
 
-		float inputX = Input.GetAxis("Horizontal");
-		float inputY = Input.GetAxis("Vertical");
+		float inputX = state.ThumbSticks.Left.X;
+		float inputY = state.ThumbSticks.Left.Y;
 
 		moveDirection = inputY * transform.forward + inputX * transform.right;
 		controller.SimpleMove(moveDirection * speed * Time.deltaTime);
 
-		
-
-		float rotationX = Input.GetAxis("JoyX2") * lookSpeed * Time.deltaTime + transform.localEulerAngles.y;
+		float rotationX = state.ThumbSticks.Right.X * lookSpeed * Time.deltaTime + transform.localEulerAngles.y;
 		transform.localEulerAngles = new Vector3(0, rotationX, 0);
 
-		GamePad.SetVibration(playerIndex, inputX-0.5f, inputY-0.5f);
+		//GamePad.SetVibration(playerIndex, Mathf.Abs(transform.position.x) / 20f, Mathf.Abs(transform.position.z) / 20f);
+
 		prevState = state;
 	}
 }
