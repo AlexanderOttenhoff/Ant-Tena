@@ -6,7 +6,8 @@ using XInputDotNetPure;
 public enum Level
 {
     Level1Section1 = 0,
-    Level1Section2
+    Level1Section2 = 1,
+    Level1Section3 = 2
 }
 
 public class MainGameLogic : MonoBehaviour
@@ -22,13 +23,12 @@ public class MainGameLogic : MonoBehaviour
     private MenuState _menuState;
     private ExplorationState _explorationState;
     private DialogueState _dialogueState;
-    private Level _currentLevel;
+    private string _currentLevel;
     private LevelData _currentLevelData;
 
     // Use this for initialization
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
         _menuState = new MenuState();
         _explorationState = new ExplorationState();
         _dialogueState = new DialogueState();
@@ -52,13 +52,13 @@ public class MainGameLogic : MonoBehaviour
         EventManager.Died += EventManagerOnDied;
         EventManager.SectionEnded += EventManagerOnSectionEnded;
         //_currentLevelData = GameObject.FindGameObjectWithTag(LevelData.GameObjectTag).GetComponent<LevelData>();
-
+        _currentLevelData = GameObject.FindGameObjectWithTag(LevelData.GameObjectTag).GetComponent<LevelData>();
+        PlayerAnt.transform.position = _currentLevelData.StartPosition.position;
     }
 
     private void EventManagerOnSectionEnded(EventData eventdata)
     {
-        _currentLevel++;
-        Application.LoadLevel(SceneNames[(int)_currentLevel]);
+        Application.LoadLevel(eventdata.Data as string);
     }
 
     void OnLevelWasLoaded(int level)

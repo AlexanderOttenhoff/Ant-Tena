@@ -7,6 +7,7 @@ public struct EventData
     public GameEvent EventType;
     public Vector3 Position;
     public GameObject SourceGameObj;
+    public object Data;
 }
 
 public class EventManager : MonoBehaviour
