@@ -72,8 +72,12 @@ public class MainGameLogic : MonoBehaviour
     {
         PlayerAnt.enabled = false;
         // <FOR DEBUGGING>
-        PlayerAnt.GetComponent<FPSInputController>().enabled = false;
-        PlayerAnt.GetComponentInChildren<MouseLook>().enabled = false;
+        var debugInput = PlayerAnt.GetComponent<FPSInputController>();
+        if (debugInput)
+        {
+            debugInput.enabled = false;
+            PlayerAnt.GetComponentInChildren<MouseLook>().enabled = false;    
+        }
         // </FOR DEBUGGING>
     }
 
@@ -82,8 +86,12 @@ public class MainGameLogic : MonoBehaviour
         Debug.Log("Game start");
         PlayerAnt.enabled = true;
         // <FOR DEBUGGING>
-        PlayerAnt.GetComponent<FPSInputController>().enabled = true;
-        PlayerAnt.GetComponentInChildren<MouseLook>().enabled = true;
+        var debugInput = PlayerAnt.GetComponent<FPSInputController>();
+        if (debugInput)
+        {
+            debugInput.enabled = true;
+            PlayerAnt.GetComponentInChildren<MouseLook>().enabled = true;
+        }
         // </FOR DEBUGGING>
         if (PlayIntro)
             this.ExecuteAfter(1f, () => GameManager.IntroSound.Play());
