@@ -13,6 +13,7 @@ public class AntStateMachine : MonoBehaviour {
 	public int numberOfCalls = 3;
 	public int callNumber = 0;
 	public float callInterval = 5;
+	public float punishmentTime = 1;
 	public AudioClip[] clipSequence;
 	public AudioClip victory;
 
@@ -23,11 +24,13 @@ public class AntStateMachine : MonoBehaviour {
 	public float minDistanceToPlayer = 10f;
 
 	private AudioSource audioSource;
+	private VibrationSource vibrationSource;
 	private bool isPlaying = false;
 
 	void Start() {
 		RandomizeAudioClips();
 		audioSource = GetComponent<AudioSource>();
+		vibrationSource = GetComponent<VibrationSource>();
 	}
 
 	public void TestAudioClip(AudioClip playerChoice) {
@@ -35,6 +38,7 @@ public class AntStateMachine : MonoBehaviour {
 			callNumber++;
 		} else {
 			callNumber = 0;
+			StartCoroutine(PunishPlayer());
 			RandomizeAudioClips();
 		}
 		if (callNumber == numberOfCalls) {
@@ -86,6 +90,18 @@ public class AntStateMachine : MonoBehaviour {
 				yield break;
 			}
 		}
+	}
+
+	IEnumerator PunishPlayer() {
+		print(Time.time);
+		vibrationSource.touchOnly = false;
+		vibrationSource.motor = VibrationSource.Motors.Hard;
+		GameObject.FindGameObjectWithTag("Player").GetComponent<VibrationListener>().sourcesInRange.Add(vibrationSource);
+		yield return new WaitForSeconds(punishmentTime);
+		vibrationSource.touchOnly = true;
+		vibrationSource.motor = VibrationSource.Motors.Soft;
+		GameObject.FindGameObjectWithTag("Player").GetComponent<VibrationListener>().sourcesInRange.Remove(vibrationSource);
+		print(Time.time);
 	}
 
 	void OnTriggerEnter(Collider other) {
