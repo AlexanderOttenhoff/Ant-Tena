@@ -113,11 +113,12 @@ public class MainGameLogic : MonoBehaviour
     {
         if (PlayerStateMachine.CurrentState == _menuState)
         {
-            if (GamePad.GetState(PlayerAnt.playerIndex).Buttons.Start == ButtonState.Pressed ||
-                Input.GetKey(KeyCode.Space))
-            {
-                PlayerStateMachine.Tick(GameEvent.GameStart);
-            }
+			PlayerStateMachine.Tick(GameEvent.GameStart);
+//            if (GamePad.GetState(PlayerAnt.playerIndex).Buttons.Start == ButtonState.Pressed ||
+//                Input.GetKey(KeyCode.Space))
+//            {
+//                PlayerStateMachine.Tick(GameEvent.GameStart);
+//            }
         }
 
         if (PlayerStateMachine.CurrentState == _explorationState)
