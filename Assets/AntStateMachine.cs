@@ -18,6 +18,9 @@ public class AntStateMachine : MonoBehaviour {
 
 	//Variables for Following State
 	public Transform target;
+	public float moveSpeed = 200f;
+	public float rotationSpeed = 100f;
+	public float minDistanceToPlayer = 10f;
 
 	private AudioSource audioSource;
 	private bool isPlaying = false;
@@ -61,6 +64,11 @@ public class AntStateMachine : MonoBehaviour {
 				}
 				break;
 			case State.Following:
+				Vector3 moveVector = target.position - transform.position;
+				transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveVector), rotationSpeed * Time.deltaTime);
+				if (moveVector.magnitude >= minDistanceToPlayer) {
+					transform.position += transform.forward * moveSpeed * Time.deltaTime;
+				}	
 				break;
 			case State.Safe:
 				break;

@@ -38,7 +38,7 @@ public class VibrationSource : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.GetComponent<VibrationListener>() != null)
 			listener = other.GetComponent("VibrationListener") as VibrationListener;
-		if (listener != null) {
+		if (listener != null && !listener.sourcesInRange.Contains(this)) {
 			listener.sourcesInRange.Add(this);
 		}
 	}

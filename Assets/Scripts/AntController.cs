@@ -87,10 +87,10 @@ public class AntController : MonoBehaviour {
 				right += source.GetVibration();
 			}
 		}
-		GamePad.SetVibration(playerIndex, left, right);
+		if (state.IsConnected) GamePad.SetVibration(playerIndex, left, right);
 	}
 
-	private List<AntStateMachine> ants = new List<AntStateMachine>();
+	public List<AntStateMachine> ants = new List<AntStateMachine>();
 	public void RegisterAnt(AntStateMachine ant) {
 		ants.Add(ant);
 	}
