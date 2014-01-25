@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using XInputDotNetPure;
 
 //[RequireComponent(typeof(CharacterController))]
@@ -18,12 +18,10 @@ public class AntController : MonoBehaviour {
 	GamePadState prevState;
 
 	AudioSource audioSource;
-	bool isPlayingAudio = false;
 
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
+	}
 
 	void Start() {
 		controller = GetComponent<CharacterController>();
@@ -60,15 +58,19 @@ public class AntController : MonoBehaviour {
 		if (!audioSource.isPlaying) {
 			if (state.Buttons.A == ButtonState.Pressed && prevState.Buttons.A != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[0]);
+				foreach (AntStateMachine  ant in ants) ant.TestAudioClip(manager.antClips[0]);
 			}
 			if (state.Buttons.B == ButtonState.Pressed && prevState.Buttons.B != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[1]);
+				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[1]);
 			}
 			if (state.Buttons.X == ButtonState.Pressed && prevState.Buttons.X != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[2]);
+				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[2]);
 			}
 			if (state.Buttons.Y == ButtonState.Pressed && prevState.Buttons.Y != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[3]);
+				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[3]);
 			}
 		}
 
@@ -79,16 +81,25 @@ public class AntController : MonoBehaviour {
 	}
 
 	void OnControllerColliderHit(ControllerColliderHit hit) {
-		float left=0, right=0;
+		float left = 0, right = 0;
 		VibrationSource source = hit.collider.GetComponent<VibrationSource>() as VibrationSource;
 		if (source != null) {
 			Debug.Log(source.name);
-			if (source.motor== VibrationSource.Motors.Hard) {
+			if (source.motor == VibrationSource.Motors.Hard) {
 				left += source.GetVibration();
 			} else {
 				right += source.GetVibration();
 			}
 		}
 		GamePad.SetVibration(playerIndex, left, right);
+	}
+
+	private List<AntStateMachine> ants = new List<AntStateMachine>();
+	public void RegisterAnt(AntStateMachine ant) {
+		ants.Add(ant);
+	}
+
+	public void UnRegisterAnt(AntStateMachine ant) {
+		if (ants.Contains(ant)) ants.Remove(ant);
 	}
 }

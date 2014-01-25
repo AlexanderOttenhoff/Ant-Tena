@@ -25,7 +25,7 @@ public class VibrationSource : MonoBehaviour {
 
 	public bool distanceSensitive = true;
 
-	public VibrationListener listener;
+	private VibrationListener listener;
 	private float? radius;
 
 	void Start() {
@@ -36,11 +36,8 @@ public class VibrationSource : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (listener != null) {
-			Debug.LogWarning("Multiple vibration listeners detected");
-		}
-
-		listener = other.GetComponent("VibrationListener") as VibrationListener;
+		if (other.GetComponent<VibrationListener>() != null)
+			listener = other.GetComponent("VibrationListener") as VibrationListener;
 		if (listener != null) {
 			listener.sourcesInRange.Add(this);
 		}
