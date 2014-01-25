@@ -3,8 +3,9 @@ using System.Collections;
 
 public class LevelData : MonoBehaviour
 {
-    public Transform StartPosition;
     public const string GameObjectTag = "LevelData";
+
+    public Transform StartPosition;
 
     // Use this for initialization
     void Start()
