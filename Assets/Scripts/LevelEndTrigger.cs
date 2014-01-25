@@ -4,7 +4,8 @@ using System.Collections;
 public class LevelEndTrigger : MonoBehaviour
 {
     public EventManager EventManager;
-    public string goToLevel;
+    public string Data;
+    public GameEvent Event;
     // Use this for initialization
     void Start()
     {
@@ -19,7 +20,7 @@ public class LevelEndTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        EventData data = new EventData { EventType = GameEvent.SectionEnded, SourceGameObj = gameObject, Data = goToLevel };
+        EventData data = new EventData { EventType = Event, SourceGameObj = gameObject, Data = Data };
         EventManager.TriggerEvent(data);
     }
 }
