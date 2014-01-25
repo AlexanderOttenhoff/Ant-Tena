@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(Collider))]
 public class VibrationSource : MonoBehaviour {
 
 	public enum VibrationTypes { Constant, Triangle, Sawtooth, Pulse, Sine };
@@ -25,11 +25,14 @@ public class VibrationSource : MonoBehaviour {
 
 	public bool distanceSensitive = true;
 
-	private VibrationListener listener;
-	private SphereCollider collider;
+	public VibrationListener listener;
+	private float? radius;
 
 	void Start() {
-		collider = GetComponent<SphereCollider>();
+		SphereCollider sc = GetComponent<SphereCollider>();
+		if (sc != null)	radius = sc.radius;
+		else			radius = null;
+		
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -44,8 +47,10 @@ public class VibrationSource : MonoBehaviour {
 	}
 
 	void OnTriggerExit(Collider other) {
-		listener.sourcesInRange.Remove(this);
-		listener = null;
+		if (listener != null) {
+			listener.sourcesInRange.Remove(this);
+			listener = null;
+		}
 	}
 
 	public float GetVibration() {
@@ -69,7 +74,7 @@ public class VibrationSource : MonoBehaviour {
 				v = Mathf.Lerp(minLevel, maxLevel, pos);
 				break;
 			case VibrationTypes.Pulse:
-				v = Mathf.Lerp(0, 1, pos)<pulseWidth ? maxLevel : minLevel;
+				v = Mathf.Lerp(0, 1, pos) < pulseWidth ? maxLevel : minLevel;
 				Debug.Log(Mathf.Lerp(0, 1, pos));
 				break;
 			case VibrationTypes.Sine:
@@ -77,9 +82,9 @@ public class VibrationSource : MonoBehaviour {
 				break;
 		}
 
-		if (distanceSensitive) {
+		if (distanceSensitive && radius.HasValue) {
 			float dist = (listener.transform.position - transform.position).magnitude;
-			v *= (collider.radius - dist) / collider.radius;
+			v *= (radius.Value - dist) / radius.Value;
 		}
 
 		return v;

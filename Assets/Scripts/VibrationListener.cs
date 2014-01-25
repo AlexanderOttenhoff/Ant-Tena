@@ -24,4 +24,20 @@ public class VibrationListener : MonoBehaviour {
 		}
 		GamePad.SetVibration(controller.playerIndex, left, right);
 	}
+
+	void OnCollisionEnter(Collision other) {
+		VibrationSource vs = other.collider.GetComponent("VibrationSource") as VibrationSource;
+		if (!sourcesInRange.Contains(vs)) {
+			sourcesInRange.Add(vs);
+			vs.listener = this;
+		}
+	}
+
+	void OnCollisionExit(Collision other) {
+		VibrationSource vs = other.collider.GetComponent("VibrationSource") as VibrationSource;
+		if (sourcesInRange.Contains(vs)) {
+			vs.listener = null;
+			sourcesInRange.Remove(vs);
+		}
+	}
 }
