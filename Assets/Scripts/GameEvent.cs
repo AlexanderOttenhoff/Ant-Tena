@@ -8,7 +8,8 @@ public enum GameEvent
     AbandonedAnt,
     DialogueSuccess,
     DialogueFailed,
-    Died
+    Died,
+    SectionEnded
 }
 
 public class DialogueState : State<GameEvent>

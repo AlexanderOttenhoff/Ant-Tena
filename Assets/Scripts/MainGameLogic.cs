@@ -3,20 +3,32 @@ using UnityEngine;
 using System.Collections;
 using XInputDotNetPure;
 
+public enum Level
+{
+    Level1Section1 = 0,
+    Level1Section2
+}
+
 public class MainGameLogic : MonoBehaviour
 {
+    public bool PlayIntro;
     public EventManager EventManager;
     public StateMachine<GameEvent> PlayerStateMachine;
     public AntController PlayerAnt;
     public GameManager GameManager;
 
+    public string[] SceneNames;
+
     private MenuState _menuState;
     private ExplorationState _explorationState;
     private DialogueState _dialogueState;
+    private Level _currentLevel;
+    private LevelData _currentLevelData;
 
     // Use this for initialization
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         _menuState = new MenuState();
         _explorationState = new ExplorationState();
         _dialogueState = new DialogueState();
@@ -34,11 +46,26 @@ public class MainGameLogic : MonoBehaviour
         _dialogueState.Transitions.Add(GameEvent.DialogueSuccess, _explorationState); // dialogue success: dialogue -> exploration
 
         PlayerStateMachine = new StateMachine<GameEvent>(_menuState);
-        
+
         EventManager.FoundAnt += EventManagerOnFoundAnt;
         EventManager.AbandonedAnt += EventManagerOnAbandonedAnt;
         EventManager.Died += EventManagerOnDied;
-        
+        EventManager.SectionEnded += EventManagerOnSectionEnded;
+        //_currentLevelData = GameObject.FindGameObjectWithTag(LevelData.GameObjectTag).GetComponent<LevelData>();
+
+    }
+
+    private void EventManagerOnSectionEnded(EventData eventdata)
+    {
+        _currentLevel++;
+        Application.LoadLevel(SceneNames[(int)_currentLevel]);
+    }
+
+    void OnLevelWasLoaded(int level)
+    {
+        _currentLevelData = GameObject.FindGameObjectWithTag(LevelData.GameObjectTag).GetComponent<LevelData>();
+        Debug.Log("current level data: " + (_currentLevelData ? " ok" : "null"));
+        PlayerAnt.transform.position = _currentLevelData.StartPosition.position;
     }
 
     private void EnterMenuState()
@@ -58,8 +85,9 @@ public class MainGameLogic : MonoBehaviour
         PlayerAnt.GetComponent<FPSInputController>().enabled = true;
         PlayerAnt.GetComponentInChildren<MouseLook>().enabled = true;
         // </FOR DEBUGGING>
-        this.ExecuteAfter(1f, () => GameManager.IntroSound.Play());
-        PlayerAnt.transform.position = GameManager.StartPosition.position;
+        if (PlayIntro)
+            this.ExecuteAfter(1f, () => GameManager.IntroSound.Play());
+        //PlayerAnt.transform.position = _currentLevelData.StartPosition.position;
     }
 
     private void EnterDialogueState()
@@ -86,10 +114,10 @@ public class MainGameLogic : MonoBehaviour
 
         if (PlayerStateMachine.CurrentState == _explorationState)
         {
-            if (PlayerAnt.transform.position.y < 0)
-            {
-                PlayerStateMachine.Tick(GameEvent.Died);
-            }
+            //if (PlayerAnt.transform.position.y < 0)
+            //{
+            //    PlayerStateMachine.Tick(GameEvent.Died);
+            //}
             // play natural sounds
         }
         else if (PlayerStateMachine.CurrentState == _dialogueState)

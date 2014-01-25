@@ -21,6 +21,7 @@ public class AntController : MonoBehaviour {
 	bool isPlayingAudio = false;
 
 	void Awake() {
+        DontDestroyOnLoad(gameObject);
 		foreach (AudioClip clip in manager.antClips) {
 			gameObject.AddComponent<AudioSource>();
 		}

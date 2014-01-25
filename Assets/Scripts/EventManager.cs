@@ -19,11 +19,13 @@ public class EventManager : MonoBehaviour
     public event GameEventHandler Died;
     public event GameEventHandler DialogueSucceeded;
     public event GameEventHandler DialogueFailed;
+    public event GameEventHandler SectionEnded;
+
+
 
     // Use this for initialization
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -50,6 +52,9 @@ public class EventManager : MonoBehaviour
                 break;
             case GameEvent.AbandonedAnt:
                 OnAbandonedAnt(evt);
+                break;
+            case GameEvent.SectionEnded:
+                OnSectionEnded(evt);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -83,6 +88,12 @@ public class EventManager : MonoBehaviour
     protected virtual void OnAbandonedAnt(EventData eventdata)
     {
         GameEventHandler handler = AbandonedAnt;
+        if (handler != null) handler(eventdata);
+    }
+
+    protected virtual void OnSectionEnded(EventData eventdata)
+    {
+        GameEventHandler handler = SectionEnded;
         if (handler != null) handler(eventdata);
     }
 }
