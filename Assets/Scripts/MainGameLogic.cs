@@ -63,8 +63,9 @@ public class MainGameLogic : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
+        Debug.Log("Level " + level + " loaded.");
         _currentLevelData = GameObject.FindGameObjectWithTag(LevelData.GameObjectTag).GetComponent<LevelData>();
-        Debug.Log("current level data: " + (_currentLevelData ? " ok" : "null"));
+        //Debug.Log("current level data: " + (_currentLevelData ? " ok" : "null"));
         PlayerAnt.transform.position = _currentLevelData.StartPosition.position;
     }
 
@@ -123,6 +124,7 @@ public class MainGameLogic : MonoBehaviour
 
         if (PlayerStateMachine.CurrentState == _explorationState)
         {
+            CheckJumpToLevel();
             //if (PlayerAnt.transform.position.y < 0)
             //{
             //    PlayerStateMachine.Tick(GameEvent.Died);
@@ -133,6 +135,41 @@ public class MainGameLogic : MonoBehaviour
         {
             // read sound input
             // play ant sounds
+        }
+    }
+
+    private void CheckJumpToLevel()
+    {
+        int level = -1;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            level = 0;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            level = 1;
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            level = 2;
+        }else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            level = 3;
+        }else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            level = 4;
+        }else if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            level = 5;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            level = 6;
+        }
+
+        if (level >= 0)
+        {
+            Application.LoadLevel(level);
         }
     }
 
