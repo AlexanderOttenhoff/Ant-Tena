@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 public class AntStateMachine : MonoBehaviour {
 
-	public List<AudioClip> clips;
-	void Awake() {
+	public GameManager manager;
 
-	}
 }
