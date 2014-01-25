@@ -75,7 +75,6 @@ public class VibrationSource : MonoBehaviour {
 				break;
 			case VibrationTypes.Pulse:
 				v = Mathf.Lerp(0, 1, pos) < pulseWidth ? maxLevel : minLevel;
-				Debug.Log(Mathf.Lerp(0, 1, pos));
 				break;
 			case VibrationTypes.Sine:
 				v = (minLevel + (maxLevel - minLevel) * Mathf.Sin(2 * Mathf.PI * frequency * t + phase));

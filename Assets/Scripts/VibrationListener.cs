@@ -7,10 +7,10 @@ public class VibrationListener : MonoBehaviour {
 
 	public List<VibrationSource> sourcesInRange;
 
-	private AntController controller;
+	private AntController antController;
 
 	public void Start() {
-		controller = GetComponent<AntController>();
+		antController = GetComponent<AntController>();
 	}
 
 	public void Update() {
@@ -22,22 +22,6 @@ public class VibrationListener : MonoBehaviour {
 				right += source.GetVibration();
 			}
 		}
-		GamePad.SetVibration(controller.playerIndex, left, right);
-	}
-
-	void OnCollisionEnter(Collision other) {
-		VibrationSource vs = other.collider.GetComponent("VibrationSource") as VibrationSource;
-		if (!sourcesInRange.Contains(vs)) {
-			sourcesInRange.Add(vs);
-			vs.listener = this;
-		}
-	}
-
-	void OnCollisionExit(Collision other) {
-		VibrationSource vs = other.collider.GetComponent("VibrationSource") as VibrationSource;
-		if (sourcesInRange.Contains(vs)) {
-			vs.listener = null;
-			sourcesInRange.Remove(vs);
-		}
+		GamePad.SetVibration(antController.playerIndex, left, right);
 	}
 }
