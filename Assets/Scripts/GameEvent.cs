@@ -13,7 +13,11 @@ public enum GameEvent
 
 public class DialogueState : State<GameEvent>
 {
-    public DialogueState() : base("dialogue") { }
+    public DialogueState() : base("dialogue")
+    {
+    }
+
+    
 }
 
 public class ExplorationState : State<GameEvent>

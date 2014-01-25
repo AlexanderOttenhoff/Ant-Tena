@@ -21,15 +21,55 @@ public class MainGameLogic : MonoBehaviour
         _dialogueState = new DialogueState();
 
         _menuState.Transitions.Add(GameEvent.GameStart, _explorationState);// game start: menu -> exploration
+        _menuState.OnExitState += ExitMenuState;
+        _menuState.OnEnterState += EnterMenuState;
+
         _explorationState.Transitions.Add(GameEvent.FoundAnt, _dialogueState); // found ant: exploration -> dialogue
         _explorationState.Transitions.Add(GameEvent.Died, _menuState); // died: exploration -> menu
+
+        _dialogueState.OnEnterState += EnterDialogueState;
+        _dialogueState.OnExitState += ExitDialogueState;
         _dialogueState.Transitions.Add(GameEvent.AbandonedAnt, _explorationState); // left ant: dialogue -> exploration
         _dialogueState.Transitions.Add(GameEvent.DialogueSuccess, _explorationState); // dialogue success: dialogue -> exploration
 
         PlayerStateMachine = new StateMachine<GameEvent>(_menuState);
-
+        
         EventManager.FoundAnt += EventManagerOnFoundAnt;
         EventManager.AbandonedAnt += EventManagerOnAbandonedAnt;
+        EventManager.Died += EventManagerOnDied;
+        
+    }
+
+    private void EnterMenuState()
+    {
+        Debug.Log("Entered menu state");
+        // init
+        PlayerAnt.enabled = false;
+        // <FOR DEBUGGING>
+        PlayerAnt.GetComponent<FPSInputController>().enabled = false;
+        PlayerAnt.GetComponentInChildren<MouseLook>().enabled = false;
+        // </FOR DEBUGGING>
+    }
+
+    private void ExitMenuState()
+    {
+        Debug.Log("Game start");
+        // init
+        PlayerAnt.enabled = true;
+        // <FOR DEBUGGING>
+        PlayerAnt.GetComponent<FPSInputController>().enabled = true;
+        PlayerAnt.GetComponentInChildren<MouseLook>().enabled = true;
+        // </FOR DEBUGGING>
+    }
+
+    private void EnterDialogueState()
+    {
+        Debug.Log("found ant");
+    }
+
+    private void ExitDialogueState()
+    {
+        Debug.Log("abandoned ant");
     }
 
     // Update is called once per frame
@@ -55,15 +95,24 @@ public class MainGameLogic : MonoBehaviour
         }
     }
 
+    void OnGUI()
+    {
+        GUILayout.Label("State: " + PlayerStateMachine.CurrentState);
+    }
+
+
     private void EventManagerOnAbandonedAnt(EventData eventdata)
     {
-        Debug.Log("abandoned ant");
         PlayerStateMachine.Tick(GameEvent.AbandonedAnt);
     }
 
     private void EventManagerOnFoundAnt(EventData eventdata)
     {
-        Debug.Log("found ant");
         PlayerStateMachine.Tick(GameEvent.FoundAnt);
+    }
+
+    private void EventManagerOnDied(EventData eventdata)
+    {
+        PlayerStateMachine.Tick(GameEvent.Died);
     }
 }

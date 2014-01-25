@@ -16,7 +16,6 @@ public class AudioInputController : MonoBehaviour
     public FilterData FilterLeftButton;
     public FilterData FilterRightButton;
 
-
     // Use this for initialization
     void Start()
     {
