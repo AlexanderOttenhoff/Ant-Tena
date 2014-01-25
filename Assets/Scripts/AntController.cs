@@ -71,14 +71,19 @@ public class AntController : MonoBehaviour {
 		}
 
 		prevState = state;
-		//if (controller.collisionflags & CollisionFlags.sides) {
-		//	print("sides touching object");
-		//}
 	}
 
 	void OnControllerColliderHit(ControllerColliderHit hit) {
 		float left = 0, right = 0;
 		VibrationSource source = hit.collider.GetComponent<VibrationSource>() as VibrationSource;
+		if (hit.collider.GetComponent<Anthill>() != null) {
+			Anthill anthill = hit.collider.GetComponent<Anthill>();
+			foreach (AntStateMachine ant in ants) {
+				ant.currentState = AntStateMachine.State.Safe;
+			}
+			ants.Clear();
+			source.SendMessage("DisableVibration");
+		}
 		if (source != null) {
 			Debug.Log(source.name);
 			if (source.motor == VibrationSource.Motors.Hard) {

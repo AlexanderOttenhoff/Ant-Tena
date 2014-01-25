@@ -24,6 +24,7 @@ public class VibrationSource : MonoBehaviour {
 	public float pulseWidth = 0.5f;
 
 	public bool distanceSensitive = true;
+	public bool touchOnly = false;
 
 	private VibrationListener listener;
 	private float? radius;
@@ -36,6 +37,7 @@ public class VibrationSource : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
+		if (touchOnly) return;
 		if (other.GetComponent<VibrationListener>() != null)
 			listener = other.GetComponent("VibrationListener") as VibrationListener;
 		if (listener != null && !listener.sourcesInRange.Contains(this)) {
@@ -84,5 +86,9 @@ public class VibrationSource : MonoBehaviour {
 		}
 
 		return v;
+	}
+	public void DisableVibration() {
+		maxLevel = 0;
+		minLevel = 0;
 	}
 }
