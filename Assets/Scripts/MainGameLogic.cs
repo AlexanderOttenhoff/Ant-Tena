@@ -13,8 +13,6 @@ public class MainGameLogic : MonoBehaviour
     private ExplorationState _explorationState;
     private DialogueState _dialogueState;
 
-    private AntNPC _currentAntNPC;
-
     // Use this for initialization
     void Start()
     {
@@ -24,6 +22,7 @@ public class MainGameLogic : MonoBehaviour
 
         _menuState.Transitions.Add(GameEvent.GameStart, _explorationState);// game start: menu -> exploration
         _explorationState.Transitions.Add(GameEvent.FoundAnt, _dialogueState); // found ant: exploration -> dialogue
+        _explorationState.Transitions.Add(GameEvent.Died, _menuState); // died: exploration -> menu
         _dialogueState.Transitions.Add(GameEvent.AbandonedAnt, _explorationState); // left ant: dialogue -> exploration
         _dialogueState.Transitions.Add(GameEvent.DialogueSuccess, _explorationState); // dialogue success: dialogue -> exploration
 
@@ -38,7 +37,8 @@ public class MainGameLogic : MonoBehaviour
     {
         if (PlayerStateMachine.CurrentState == _menuState)
         {
-            if (GamePad.GetState(PlayerAnt.playerIndex).Buttons.Start == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerAnt.playerIndex).Buttons.Start == ButtonState.Pressed ||
+                Input.GetKey(KeyCode.Space))
             {
                 PlayerStateMachine.Tick(GameEvent.GameStart);
             }
@@ -65,6 +65,5 @@ public class MainGameLogic : MonoBehaviour
     {
         Debug.Log("found ant");
         PlayerStateMachine.Tick(GameEvent.FoundAnt);
-        _currentAntNPC = eventdata.SourceGameObj.GetComponent<AntNPC>();
     }
 }
