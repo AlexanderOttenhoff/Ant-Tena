@@ -17,6 +17,7 @@ public class AntStateMachine : MonoBehaviour {
 	public AudioClip victory;
 
 	//Variables for Following State
+	public Transform target;
 
 	private AudioSource audioSource;
 	private bool isPlaying = false;
@@ -35,6 +36,7 @@ public class AntStateMachine : MonoBehaviour {
 		}
 		if (callNumber == numberOfCalls) {
 			currentState = State.Following;
+			target = GameObject.FindWithTag("Player").transform;
 			audioSource.Stop();
 			audioSource.PlayOneShot(victory);
 		}
