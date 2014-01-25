@@ -40,6 +40,7 @@ public class AntStateMachine : MonoBehaviour {
 	void Update() {
 		if (Time.timeSinceLevelLoad > lastPlayTime + audioInterval) {
 			audioSource.PlayOneShot(clipSequence[stateNumber]);
+			lastPlayTime = Time.timeSinceLevelLoad;
 		}
 	}
 

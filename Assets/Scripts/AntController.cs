@@ -2,7 +2,7 @@
 using System.Collections;
 using XInputDotNetPure;
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(CharacterController))]
 public class AntController : MonoBehaviour {
 
 	public float speed = 250f;
@@ -20,15 +20,11 @@ public class AntController : MonoBehaviour {
 	AudioSource audioSource;
 	bool isPlayingAudio = false;
 
-	void Awake() {
-		for (int i = 0; i < manager.antClips.Count; i++) {
-			gameObject.AddComponent<AudioSource>();
-		}
-	}
 
 	void Start() {
 		controller = GetComponent<CharacterController>();
 		audioSource = GetComponent<AudioSource>();
+
 	}
 
 	void Update() {
@@ -73,5 +69,22 @@ public class AntController : MonoBehaviour {
 		}
 
 		prevState = state;
+		//if (controller.collisionflags & CollisionFlags.sides) {
+		//	print("sides touching object");
+		//}
+	}
+
+	void OnControllerColliderHit(ControllerColliderHit hit) {
+		float left=0, right=0;
+		VibrationSource source = hit.collider.GetComponent<VibrationSource>() as VibrationSource;
+		if (source != null) {
+			Debug.Log(source.name);
+			if (source.motor== VibrationSource.Motors.Hard) {
+				left += source.GetVibration();
+			} else {
+				right += source.GetVibration();
+			}
+		}
+		GamePad.SetVibration(playerIndex, left, right);
 	}
 }
