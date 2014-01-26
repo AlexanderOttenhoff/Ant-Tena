@@ -12,7 +12,6 @@ public class IntroVideo : MonoBehaviour {
 	void OnGUI() {
 		movie.Play();
 		GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), movie, ScaleMode.StretchToFill);
-
 	}
 
 	// Update is called once per frame
@@ -29,7 +28,7 @@ public class IntroVideo : MonoBehaviour {
 		}
 
 		state = GamePad.GetState(playerIndex);
-		if (state.Buttons.A == ButtonState.Pressed || state.Buttons.Start == ButtonState.Pressed || (!movie.isPlaying && !audio.isPlaying)) {
+		if (state.Buttons.A == ButtonState.Pressed || state.Buttons.Start == ButtonState.Pressed ) {
 			Screen.showCursor = true;
 			Application.LoadLevel(1);
 		}
