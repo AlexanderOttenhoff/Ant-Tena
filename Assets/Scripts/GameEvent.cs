@@ -14,11 +14,7 @@ public enum GameEvent
 
 public class DialogueState : State<GameEvent>
 {
-    public DialogueState() : base("dialogue")
-    {
-    }
-
-    
+    public DialogueState() : base("dialogue") { }
 }
 
 public class ExplorationState : State<GameEvent>
@@ -29,9 +25,4 @@ public class ExplorationState : State<GameEvent>
 public class MenuState : State<GameEvent>
 {
     public MenuState() : base("menu") { }
-}
-
-public class CutSceneState : State<GameEvent>
-{
-    public CutSceneState() : base("cutscene") { }
 }

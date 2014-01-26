@@ -20,7 +20,11 @@ public class LevelEndTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        EventData data = new EventData { EventType = Event, SourceGameObj = gameObject, Data = Data };
-        EventManager.TriggerEvent(data);
+        if (collider.CompareTag("Player"))
+        {
+            EventData data = new EventData { EventType = Event, SourceGameObj = gameObject, Data = Data };
+            EventManager.TriggerEvent(data);    
+        }
+        
     }
 }
