@@ -49,7 +49,7 @@ public class MainGameLogic : MonoBehaviour
 
         EventManager.Died += EventManagerOnDied;
         EventManager.SectionEnded += EventManagerOnSectionEnded;
-        _currentLevel = Application.loadedLevel;
+        _currentLevel = Application.loadedLevel - 1;
     }
 
     private void EventManagerOnSectionEnded(EventData eventdata)
@@ -121,31 +121,35 @@ public class MainGameLogic : MonoBehaviour
         int level = -1;
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            level = 0;
+            level = 1;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            level = 1;
+            level = 2;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            level = 2;
+            level = 23;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            level = 3;
+            level = 4;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            level = 4;
+            level = 5;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            level = 5;
+            level = 6;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha7))
         {
-            level = 6;
+            level = 7;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            level = 8;
         }
 
         if (level >= 0)
