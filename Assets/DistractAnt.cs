@@ -19,7 +19,7 @@ public class DistractAnt : MonoBehaviour
     private NavMeshAgent _navAgent;
     private Transform _player;
 
-    private bool _waiting;
+    private bool playSound;
     private State CurrentState;
 
     // Use this for initialization
@@ -27,7 +27,6 @@ public class DistractAnt : MonoBehaviour
     {
         _navAgent = GetComponent<NavMeshAgent>();
         _player = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        _waiting = true;
         CurrentState = State.Hidden;
     }
 
@@ -40,36 +39,28 @@ public class DistractAnt : MonoBehaviour
                 if (Vector3.Distance(transform.position, _player.position) < TriggerDistance)
                 {
                     // play sound and move
-                    Sound.Play();
                     _navAgent.SetDestination(Destination.position);
                     CurrentState = State.Running;
+                    playSound = true;
                 }
                 break;
             case State.Running:
-                if (!Sound.isPlaying)
-                    Sound.Play();
                 if (Vector3.Distance(transform.position, Destination.position) < 1f)
                     CurrentState = State.Waiting;
                 break;
             case State.Waiting:
-                if (!Sound.isPlaying)
-                    Sound.Play();
                 if (Vector3.Distance(transform.position, _player.position) < TriggerDistance/2f && SelfDestruct)
+                {
+                    playSound = false;
                     this.ExecuteAfterSilent(Sound, () => Destroy(gameObject));
+                }
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        if (!_waiting)
+        if (playSound && !Sound.isPlaying)
         {
-
-
-            if (Vector3.Distance(transform.position, Destination.position) < 1f)
-            {
-                Debug.Log("arrived");
-                //Sound.Stop();
-
-            }
+            Sound.Play();
         }
     }
 
