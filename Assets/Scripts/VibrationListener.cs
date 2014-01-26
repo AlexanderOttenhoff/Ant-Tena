@@ -15,14 +15,15 @@ public class VibrationListener : MonoBehaviour {
 	}
 
 	public void Update() {
-		float left = 0, right = 0;
+		float hard = 0, soft = 0;
 		foreach (VibrationSource source in sourcesInRange) {
 			if (source.motor == VibrationSource.Motors.Hard) {
-				left += source.GetVibration();
+				hard += source.GetVibration();
 			} else {
-				right += source.GetVibration();
+				soft += source.GetVibration();
 			}
+
+			if (antController.playerIndex != null) GamePad.SetVibration(antController.playerIndex, hard, soft);
 		}
-		if (antController.playerIndex != null) GamePad.SetVibration(antController.playerIndex, left, right);
 	}
 }

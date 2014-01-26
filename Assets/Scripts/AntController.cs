@@ -8,10 +8,12 @@ public class AntController : MonoBehaviour {
 	public float speed = 250f;
 	public float lookSpeed = 100f;
 	public GameManager manager;
+	public AudioClip click;
+	public List<AntStateMachine> ants = new List<AntStateMachine>();
 
 	private Vector3 moveDirection = Vector3.zero;
 	private CharacterController controller;
-    private BandPassFilter filter;
+	private BandPassFilter filter;
 
 	bool playerIndexSet = false;
 	public PlayerIndex playerIndex;
@@ -19,11 +21,13 @@ public class AntController : MonoBehaviour {
 	GamePadState prevState;
 
 	AudioSource audioSource;
+	float prevRotation;
 
 	void Start() {
 		controller = GetComponent<CharacterController>();
 		audioSource = GetComponent<AudioSource>();
-	    filter = GetComponent<BandPassFilter>();
+		filter = GetComponent<BandPassFilter>();
+		prevRotation = 0;
 	}
 
 	void Update() {
@@ -32,7 +36,7 @@ public class AntController : MonoBehaviour {
 				PlayerIndex testPlayerIndex = (PlayerIndex)i;
 				GamePadState testState = GamePad.GetState(testPlayerIndex);
 				if (testState.IsConnected) {
-					Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
+					//Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
 					playerIndex = testPlayerIndex;
 					playerIndexSet = true;
 				}
@@ -55,7 +59,7 @@ public class AntController : MonoBehaviour {
 		if (!audioSource.isPlaying) {
 			if (state.Buttons.A == ButtonState.Pressed && prevState.Buttons.A != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[0]);
-				foreach (AntStateMachine  ant in ants) ant.TestAudioClip(manager.antClips[0]);
+				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[0]);
 			}
 			if (state.Buttons.B == ButtonState.Pressed && prevState.Buttons.B != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[1]);
@@ -69,17 +73,15 @@ public class AntController : MonoBehaviour {
 				audioSource.PlayOneShot(manager.antClips[3]);
 				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[3]);
 			}
-		    if (state.Buttons.LeftShoulder == ButtonState.Pressed)
-		    {
-		        filter.ActivateFilter(0f, 2000f); // low pass
-		    }
-		    else
-		    {
-		        filter.Deactivate();
-		    }
 		}
 
-		prevState = state;
+		float rotation = Vector3.Angle(transform.forward, Vector3.forward);
+		rotation = Mathf.Repeat(rotation, 180) - 90;
+		if (Mathf.Sign(rotation) != Mathf.Sign(prevRotation)) {
+			print("ping");
+			audioSource.PlayOneShot(click);
+		}
+		prevRotation = rotation;
 	}
 
 	void OnControllerColliderHit(ControllerColliderHit hit) {
@@ -104,7 +106,6 @@ public class AntController : MonoBehaviour {
 		if (state.IsConnected) GamePad.SetVibration(playerIndex, left, right);
 	}
 
-	public List<AntStateMachine> ants = new List<AntStateMachine>();
 	public void RegisterAnt(AntStateMachine ant) {
 		ants.Add(ant);
 	}
