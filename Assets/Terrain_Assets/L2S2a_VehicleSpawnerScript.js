@@ -14,6 +14,7 @@ var maximumUses: int = 1000;
 private var countdown : float;
 
 
+
 function Start () {
 
 	countdown = Random.Range(vehicleMinCreationRate, vehicleMaxCreationRate);
