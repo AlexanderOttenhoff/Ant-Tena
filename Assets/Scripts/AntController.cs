@@ -7,6 +7,7 @@ public class AntController : MonoBehaviour {
 
 	public float speed = 250f;
 	public float lookSpeed = 100f;
+	public float clickAngle = 90f;
 	public GameManager manager;
 	public AudioClip click;
 	public List<AntStateMachine> ants = new List<AntStateMachine>();
@@ -55,33 +56,29 @@ public class AntController : MonoBehaviour {
 		transform.localEulerAngles = new Vector3(0, rotationX, 0);
 
 		//GamePad.SetVibration(playerIndex, Mathf.Abs(transform.position.x) / 20f, Mathf.Abs(transform.position.z) / 20f);
+		float rotation = Mathf.Repeat(transform.eulerAngles.y, clickAngle * 2) - clickAngle;
+		print(state.Buttons.A);
 
 		if (!audioSource.isPlaying) {
 			if (state.Buttons.A == ButtonState.Pressed && prevState.Buttons.A != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[0]);
+				print(manager.antClips[0]);
 				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[0]);
-			}
-			if (state.Buttons.B == ButtonState.Pressed && prevState.Buttons.B != ButtonState.Pressed) {
+			} else if (state.Buttons.B == ButtonState.Pressed && prevState.Buttons.B != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[1]);
 				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[1]);
-			}
-			if (state.Buttons.X == ButtonState.Pressed && prevState.Buttons.X != ButtonState.Pressed) {
+			} else if (state.Buttons.X == ButtonState.Pressed && prevState.Buttons.X != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[2]);
 				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[2]);
-			}
-			if (state.Buttons.Y == ButtonState.Pressed && prevState.Buttons.Y != ButtonState.Pressed) {
+			} else if (state.Buttons.Y == ButtonState.Pressed && prevState.Buttons.Y != ButtonState.Pressed) {
 				audioSource.PlayOneShot(manager.antClips[3]);
 				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[3]);
+			} else if (Mathf.Sign(rotation) != Mathf.Sign(prevRotation)) {
+				audioSource.PlayOneShot(click);
 			}
+			prevRotation = rotation;
+			prevState = state;
 		}
-
-		float rotation = Vector3.Angle(transform.forward, Vector3.forward);
-		rotation = Mathf.Repeat(rotation, 180) - 90;
-		if (Mathf.Sign(rotation) != Mathf.Sign(prevRotation)) {
-			print("ping");
-			audioSource.PlayOneShot(click);
-		}
-		prevRotation = rotation;
 	}
 
 	void OnControllerColliderHit(ControllerColliderHit hit) {
