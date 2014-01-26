@@ -60,6 +60,7 @@ public class MainGameLogic : MonoBehaviour
         //audio.Play();
         //PlayerAnt.enabled = false;
         //this.ExecuteAfterSilent(audio, () => Application.LoadLevel(_currentLevel));
+        Application.LoadLevel(_currentLevel);
     }
 
     void OnLevelWasLoaded(int level)
