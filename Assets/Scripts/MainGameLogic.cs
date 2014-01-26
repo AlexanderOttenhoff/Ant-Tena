@@ -56,10 +56,10 @@ public class MainGameLogic : MonoBehaviour
     {
         string level = eventdata.Data as string;
         _currentLevel = Array.IndexOf(SceneNames, level);
-        audio.clip = GameManager.missionComplete;
-        audio.Play();
-        PlayerAnt.enabled = false;
-        this.ExecuteAfterSilent(audio, () => Application.LoadLevel(_currentLevel));
+        //audio.clip = GameManager.missionComplete;
+        //audio.Play();
+        //PlayerAnt.enabled = false;
+        //this.ExecuteAfterSilent(audio, () => Application.LoadLevel(_currentLevel));
     }
 
     void OnLevelWasLoaded(int level)
