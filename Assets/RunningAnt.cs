@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class RunningAnt : MonoBehaviour
 {
@@ -38,13 +40,18 @@ public class RunningAnt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_currentState == State.Calling)
+        switch (_currentState)
         {
-            CallingStateUpdate();
-        }
-        else if (_currentState == State.Running)
-        {
-            RunningStateUpdate();
+            case State.Running:
+                RunningStateUpdate();
+                break;
+            case State.Calling:
+                CallingStateUpdate();
+                break;
+            case State.Stopped:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -102,7 +109,7 @@ public class RunningAnt : MonoBehaviour
             if (!ChirpClip.isPlaying && !_chirpCooldown)
             {
                 _chirpCooldown = true;
-                this.ExecuteAfter(ChirpCoolDownTime,
+                this.ExecuteAfter(ChirpCoolDownTime + Random.Range(-1f, 1f),
                     () =>{  ChirpClip.Play();   _chirpCooldown = false; });
             }
         }

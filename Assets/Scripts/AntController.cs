@@ -11,6 +11,7 @@ public class AntController : MonoBehaviour {
 
 	private Vector3 moveDirection = Vector3.zero;
 	private CharacterController controller;
+    private BandPassFilter filter;
 
 	bool playerIndexSet = false;
 	public PlayerIndex playerIndex;
@@ -22,7 +23,7 @@ public class AntController : MonoBehaviour {
 	void Start() {
 		controller = GetComponent<CharacterController>();
 		audioSource = GetComponent<AudioSource>();
-
+	    filter = GetComponent<BandPassFilter>();
 	}
 
 	void Update() {
@@ -68,6 +69,14 @@ public class AntController : MonoBehaviour {
 				audioSource.PlayOneShot(manager.antClips[3]);
 				foreach (AntStateMachine ant in ants) ant.TestAudioClip(manager.antClips[3]);
 			}
+		    if (state.Buttons.LeftShoulder == ButtonState.Pressed)
+		    {
+		        filter.ActivateFilter(0f, 2000f); // low pass
+		    }
+		    else
+		    {
+		        filter.Deactivate();
+		    }
 		}
 
 		prevState = state;
