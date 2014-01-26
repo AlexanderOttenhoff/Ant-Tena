@@ -7,6 +7,7 @@ public class AntController : MonoBehaviour {
 
 	public float speed = 250f;
 	public float lookSpeed = 100f;
+	public float clickAngle = 90f;
 	public GameManager manager;
 	public AudioClip click;
 	public List<AntStateMachine> ants = new List<AntStateMachine>();
@@ -75,8 +76,8 @@ public class AntController : MonoBehaviour {
 			}
 		}
 
-		float rotation = Vector3.Angle(transform.forward, Vector3.forward);
-		rotation = Mathf.Repeat(rotation, 180) - 90;
+		float rotation = Mathf.Repeat(transform.eulerAngles.y, clickAngle * 2) - clickAngle;
+		print(rotation.ToString() + ", " + prevRotation.ToString());
 		if (Mathf.Sign(rotation) != Mathf.Sign(prevRotation)) {
 			print("ping");
 			audioSource.PlayOneShot(click);
