@@ -14,4 +14,16 @@ public static class ExtensionMethods {
         yield return new WaitForSeconds(time);
         action();
     }
+
+    public static void ExecuteAfterSilent(this MonoBehaviour mono, AudioSource source, Action action)
+    {
+        mono.StartCoroutine(WaitForSound(source, action));
+    }
+
+    private static IEnumerator WaitForSound(AudioSource source, Action action)
+    {
+        while (source.isPlaying)
+            yield return 0;
+        action();
+    }
 }

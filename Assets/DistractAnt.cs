@@ -55,7 +55,7 @@ public class DistractAnt : MonoBehaviour
                 if (!Sound.isPlaying)
                     Sound.Play();
                 if (Vector3.Distance(transform.position, _player.position) < TriggerDistance/2f && SelfDestruct)
-                    StartCoroutine(DestroyWhenSilent());
+                    this.ExecuteAfterSilent(Sound, () => Destroy(gameObject));
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
