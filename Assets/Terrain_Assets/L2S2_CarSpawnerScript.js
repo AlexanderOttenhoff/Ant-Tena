@@ -3,7 +3,7 @@
 //Inspector Variables
 var carCreationRate: float = 10;
 var countdown : int;
-
+var carObject: Transform;
 
 function Start () {
 
@@ -19,7 +19,11 @@ function Update () {
 	{
 		
 		countdown = carCreationRate;
-		Instantiate(brick, Vector3 (x, y, 0), Quaternion.identity);
+		v
+		Rigidbody newCar = (Rigidbody) Instantiate(carObject, transform.position, transform.rotation);
+		
+		newCar.
+		
 		
 	}	
 
