@@ -1,4 +1,4 @@
-Ant-Tenna
+Ant-Tena
 =========
 
 Instead of perceiving our surroundings visually as we do on an everyday basis we challenge the player to see though other physiological channels and by this we draw attention to the fact that our common senses should not be taken for granted. This can induce a "therapeutic phenomenon" on the user.
